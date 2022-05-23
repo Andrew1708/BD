@@ -1,0 +1,16 @@
+Prateleira entidade fraca?
+
+Relalção IVM, ponto de retalho: faz sentido não haver máquinas sem ser nos pontos de retalho?
+
+É necessário criar um entidade histórico
+
+Qual a primary key de reposição?
+
+Como fazer o planograma? Relação ou entidade intermedia
+
+"O sistema deve determinar, para uma super categoria, quantas sub categorias existem" - Como representamos isto ???
+
+Verificar que categoria não entra na agregação 
+
+----
+Relação ternária entre retalhista, reposição e categoria ?

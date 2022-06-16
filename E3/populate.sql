@@ -168,3 +168,4 @@ insert into responsavel_por values('bolos', 3, 45, 'GALP');
 insert into responsavel_por values('sumos', 5, 12, 'BP');
 insert into responsavel_por values('agua', 5, 12, 'BP');
 insert into responsavel_por values('ovos', 4, 12, 'BP');
+SUBCLASS_ORIGIN

@@ -111,7 +111,7 @@ create table responsavel_por (
     tin numeric(9) not null,
     num_serie numeric(12) not null,
     fabricante varchar(80) not null,
-    constraint pk_responsavel_por primary key(num_serie, fabricante), 
+    constraint pk_responsavel_por primary key(nome_cat, num_serie, fabricante), 
     constraint fk_responsavel_por_num_serie_e_fabricante foreign key(num_serie, fabricante) references ivm(num_serie, fabricante),
     constraint fk_responsavel_por_tin foreign key(tin) references retalhista(tin),
     constraint fk_responsavel_por_nome_cat foreign key(nome_cat) references categoria(nome)

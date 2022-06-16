@@ -129,3 +129,42 @@ create table evento_reposicao (
     constraint fk_evento_reposicao_ean_e_nro_e_num_serie_e_fabricante foreign key(ean, nro, num_serie, fabricante) references planograma(ean, nro, num_serie, fabricante),
     constraint fk_evento_reposicao_tin foreign key(tin) references retalhista(tin)
 );
+
+-- SCRIPT
+-- Retalhistas
+insert into retalhista values(1, 'André');
+insert into retalhista values(2, 'Pedro');
+insert into retalhista values(3, 'José');
+insert into retalhista values(4, 'Manel');
+insert into retalhista values(5, 'Guilherme');
+insert into retalhista values(6, 'Jessica');
+insert into retalhista values(7, 'Monica');
+insert into retalhista values(8, 'Joana');
+
+-- IVMs
+insert into ivm values(45, 'GALP');
+insert into ivm values(12, 'BP');
+insert into ivm values(13, 'AUCHAN');
+insert into ivm values(27, 'EDP');
+insert into ivm values(30, 'PRIO');
+insert into ivm values(14, 'WORTEN');
+
+-- Categorias
+insert into categoria values('ovos');
+insert into categoria values('choco');
+insert into categoria values('leite');
+insert into categoria values('pao');
+insert into categoria values('bolos');
+insert into categoria values('sumos');
+insert into categoria values('agua');
+insert into categoria values('fruta');
+
+-- responsavel_por
+insert into responsavel_por values('ovos', 1, 45, 'GALP');
+insert into responsavel_por values('choco', 1, 45, 'GALP');
+insert into responsavel_por values('leite', 2, 45, 'GALP');
+insert into responsavel_por values('pao', 2, 45, 'GALP');
+insert into responsavel_por values('bolos', 3, 45, 'GALP');
+insert into responsavel_por values('sumos', 5, 12, 'BP');
+insert into responsavel_por values('agua', 5, 12, 'BP');
+insert into responsavel_por values('ovos', 4, 12, 'BP');

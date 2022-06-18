@@ -138,42 +138,180 @@ create table evento_reposicao (
 );
 
 -- SCRIPT
--- Retalhistas
-insert into retalhista values(1, 'André');
-insert into retalhista values(2, 'Pedro');
-insert into retalhista values(3, 'José');
-insert into retalhista values(4, 'Manel');
-insert into retalhista values(5, 'Guilherme');
-insert into retalhista values(6, 'Jessica');
-insert into retalhista values(7, 'Monica');
-insert into retalhista values(8, 'Joana');
+insert into catergoria 
+values 
+('Bebidas'), 
+('Águas'),
+('Sumos'),
+('Refrigerantes'),
+('Sopas'),
+('Sandes'),
+('Baguetes'),
+('Sobremesas'),
+('Iogurtes'),
+('Gelatina'),
+('Bolos'),
+('Chocolates');
 
--- IVMs
-insert into ivm values(45, 'GALP');
-insert into ivm values(12, 'BP');
-insert into ivm values(13, 'AUCHAN');
-insert into ivm values(27, 'EDP');
-insert into ivm values(30, 'PRIO');
-insert into ivm values(14, 'WORTEN');
+insert into categoria_simples
+values
+('Águas'),
+('Sumos'),
+('Refrigerantes'),
+('Sopas'),
+('Sandes'),
+('Baguetes'),
+('Iogurtes'),
+('Gelatina'),
+('Bolos'),
+('Chocolates');
 
--- Categorias
-insert into categoria values('ovos');
-insert into categoria values('choco');
-insert into categoria values('leite');
-insert into categoria values('pao');
-insert into categoria values('bolos');
-insert into categoria values('sumos');
-insert into categoria values('agua');
-insert into categoria values('fruta');
+insert into super_categoria
+values
+('Bebidas'),
+('Comidas'), 
+('Sobremesas');  
 
--- responsavel_por
-insert into responsavel_por values('ovos', 1, 45, 'GALP');
-insert into responsavel_por values('choco', 1, 45, 'GALP');
-insert into responsavel_por values('leite', 2, 45, 'GALP');
-insert into responsavel_por values('pao', 2, 45, 'GALP');
-insert into responsavel_por values('bolos', 3, 45, 'GALP');
-insert into responsavel_por values('sumos', 5, 12, 'BP');
-insert into responsavel_por values('agua', 5, 12, 'BP');
-insert into responsavel_por values('ovos', 4, 12, 'BP');
+insert into tem_outra
+values
+('Águas', 'Bebidas'),
+('Sumos', 'Bebidas'),
+('Refrigerantes', 'Bebidas'),
+('Sopas', 'Comidas'),
+('Sandes', 'Comidas'),
+('Iogurtes', 'Sobremesas'),
+('Gelatina', 'Sobremesas'),
+('Bolos', 'Sobremesas');
 
+insert into produto
+values
+(1000000000001, 'Águas', 'Fastio'),
+(1000000000002, 'Águas', 'Luso'),
+(1000000000003, 'Sumos', 'Compal'),
+(1000000000004, 'Sumos', 'Joy'),
+(1000000000005, 'Refrigerantes', 'Coca-Cola'),
+(1000000000006, 'Refrigerantes', 'Iced Tea'),
+(1000000000011, 'Refrigerantes', 'Sumol'),
+(1000000000012, 'Sopas', 'Caldo Verde'),
+(1000000000013, 'Sandes', 'Atum'),
+(1000000000021, 'Sandes', 'Frango'),
+(1000000000022, 'Iogurtes', 'Mimosa'),
+(1000000000023, 'Gelatina', 'Royal'),
+(1000000000031, 'Bolos', 'Waffle'),
+(1000000000032, 'Bolos', 'Mil-folhas'),
+(1000000000033, 'Chocolates', 'Twix'),
+(1000000000034, 'Chocolates', 'Mars'),
+(1000000000035, 'Chocolates', 'Milka');
 
+insert into tem_categoria
+values
+(1000000000001, 'Águas')
+(1000000000002, 'Águas')
+(1000000000003, 'Sumos')
+(1000000000004, 'Sumos')
+(1000000000005, 'Refrigerantes'),
+(1000000000006, 'Refrigerantes'),
+(1000000000011, 'Refrigerantes'),
+(1000000000012, 'Sopas'),
+(1000000000013, 'Sandes'),
+(1000000000021, 'Sandes'),
+(1000000000022, 'Iogurtes'),
+(1000000000023, 'Gelatina'),
+(1000000000031, 'Bolos'),
+(1000000000032, 'Bolos'),
+(1000000000033, 'Chocolates'),
+(1000000000034, 'Chocolates'),
+(1000000000035, 'Chocolates');
+
+insert into ivm
+values
+(1001, 'SmartUI'),
+(1111, 'IVM LDA'),
+(1001, 'Fuji');
+
+insert into ponto_de_retalho
+values
+('Worten', 'Lisboa', 'Sintra'),
+('TagusPark', 'Lisboa', 'Oeiras'),
+('Clerigos', 'Porto', 'Porto'),
+
+insert into instalada_em
+values
+(1001, 'SmartUI', 'Worten'),
+(1111, 'IVM LDA', 'TagusPark')
+(1001, 'Fuji', 'Clerigos')
+
+insert into prateleira
+values
+(1, 1001, 'SmartUI', 55, 'Águas'),
+(2, 1001, 'SmartUI', 55, 'Sumos'),
+(3, 1001, 'SmartUI', 55, 'Refrigerantes'),
+(4, 1001, 'SmartUI', 55, 'Sopas'),
+(5, 1001, 'SmartUI', 55, 'Sandes'),
+(1, 1111, 'IVM LDA', 60, 'Iogurtes'),
+(2, 1111, 'IVM LDA', 45, 'Gelatina'),
+(3, 1111, 'IVM LDA', 60, 'Bolos'),
+(1, 1001, 'Fuji', 52, 'Chocolates'),
+(2, 1001, 'Fuji', 20, 'Águas'),
+(3, 1001, 'Fuji', 25, 'Sandes'),
+(4, 1001, 'Fuji', 29, 'Chocolates');
+
+insert into planograma
+values
+(1000000000001, 1, 1001, 'SmartUI', 10, 20 , 'Worten')
+(1000000000002, 1, 1001, 'SmartUI', 10, 20 , 'Worten')
+(1000000000003, 2, 1001, 'SmartUI', 10, 20 , 'Worten')
+(1000000000004, 2, 1001, 'SmartUI', 10, 20 , 'Worten')
+(1000000000005, 3, 1001, 'SmartUI', 10, 20 , 'Worten'),
+(1000000000006, 3, 1001, 'SmartUI', 10, 20 , 'Worten'),
+(1000000000011, 3, 1001, 'SmartUI', 10, 20 , 'Worten'),
+(1000000000012, 4, 1001, 'SmartUI', 10, 20 , 'Worten'),
+(1000000000013, 5, 1001, 'SmartUI', 10, 20 , 'Worten'),
+(1000000000021, 5, 1001, 'SmartUI', 10, 30 , 'Worten'),
+(1000000000022, 1, 1111, 'IVM LDA', 10, 35 , 'TagusPark'),
+(1000000000023, 2, 1111, 'IVM LDA', 30, 30 , 'TagusPark'),
+(1000000000031, 3, 1111, 'IVM LDA', 45, 45 , 'TagusPark'),
+(1000000000032, 3, 1111, 'IVM LDA', 65, 45 , 'TagusPark'),
+(1000000000033, 1, 1001, 'Fuji', 15, 45 , 'Clerigos'),
+(1000000000034, 1, 1001, 'Fuji', 15, 40 , 'Clerigos'),
+(1000000000035, 1, 1001, 'Fuji', 5, 10 , 'Clerigos'),
+(1000000000002, 1, 1001, 'Fuji', 5, 10 , 'Clerigos'),
+(1000000000013, 1, 1001, 'Fuji', 5, 15 , 'Clerigos'),
+(1000000000034, 1, 1001, 'Fuji', 20, 15 , 'Clerigos'),
+
+insert into retalhista 
+values
+(1001, 'André'),
+(1002, 'Guilherme'),
+(1003, 'João'),
+(2001, 'Jessica');
+
+insert into responsavel_por
+values
+('Águas', 1001, 1001, 'SmartUI'),
+('Sumos', 1001, 1001, 'SmartUI'),
+('Refrigerantes', 1001, 1001, 'SmartUI'),
+('Sopas', 1001, 1001, 'SmartUI'),
+('Sandes', 1001, 1001, 'SmartUI'),
+('Iogurtes', 1001, 1111, 'IVM LDA'),
+('Gelatina', 1001, 1111, 'IVM LDA'),
+('Bolos', 1001, 1111, 'IVM LDA'),
+('Chocolates', 1001, 1001, 'Fuji'),
+('Águas', 1002, 1001, 'Fuji'),
+('Sandes', 1003, 1001, 'Fuji'),
+('Chocolates', 2001, 1001, 'Fuji');
+
+insert into evento_reposicao
+values
+(1000000000001, 1, 1001, 'SmartUI', 2022-08-17 12:30:00, 10 , 1001),
+(1000000000002, 1, 1001, 'SmartUI', 2022-08-17 14:45:00, 10 , 1001),
+(1000000000003, 2, 1001, 'SmartUI', 2022-08-17 12:35:00, 10 , 1001),
+(1000000000004, 2, 1001, 'SmartUI', 2022-08-17 12:45:00, 10 , 1001),
+(1000000000005, 3, 1001, 'SmartUI', 2022-08-17 13:30:00, 10 , 1001),
+(1000000000006, 3, 1001, 'SmartUI', 2022-05-17 13:30:00, 20 , 1001),
+(1000000000006, 3, 1001, 'SmartUI', 2022-05-17 13:30:00, 20 , 1001),
+(1000000000011, 3, 1001, 'SmartUI', 2022-05-17 13:30:00, 20 , 1001),
+(1000000000011, 3, 1001, 'SmartUI', 2022-05-17 13:30:00, 20 , 1001),
+(1000000000035, 1, 1001, 'Fuji', 2022-05-17 13:30:00, 5 , 1001),
+(1000000000035, 1, 1001, 'Fuji', 2022-05-17 13:30:00, 5 , 1001),
+(1000000000035, 1, 1001, 'Fuji', 2022-05-17 13:30:00, 5 , 1001);

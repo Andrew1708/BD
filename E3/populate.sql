@@ -1,3 +1,10 @@
+/* 
+scp populate.sql ist199077@sigma.tecnico.ulisboa.pt:~ 
+ssh ist199077@sigma.tecnico.ulisboa.pt
+psql -h db.tecnico.ulisboa.pt -U ist199077
+ \i populate.sql*/
+
+
 drop table if exists categoria cascade;
 drop table if exists categoria_simples cascade;
 drop table if exists super_categoria cascade;
@@ -168,4 +175,5 @@ insert into responsavel_por values('bolos', 3, 45, 'GALP');
 insert into responsavel_por values('sumos', 5, 12, 'BP');
 insert into responsavel_por values('agua', 5, 12, 'BP');
 insert into responsavel_por values('ovos', 4, 12, 'BP');
-SUBCLASS_ORIGIN
+
+

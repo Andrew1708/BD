@@ -1,5 +1,5 @@
 create or replace function ex1() 
-returns $res$ varchar(80) 
+returns res varchar(80) 
 as 
 begin
 	select nome
@@ -15,6 +15,18 @@ begin
 		) as table 
 		natural join
 		retalhista;
+
+	return res;
+end;
+$$ language plpgsql;
+
+create or replace function ex3() 
+returns res numeric(23)
+as 
+begin
+	select ean from evento_reposicao 
+	where ean not in (select ean
+    from produto);
 
 	return res;
 end;

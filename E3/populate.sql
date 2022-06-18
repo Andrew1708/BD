@@ -39,8 +39,8 @@ create table super_categoria (
 );
 
 create table tem_outra (
+    categoria varchar(80) not null,
 	super_categoria varchar(80) not null,
-	categoria varchar(80) not null,
     constraint pk_tem_outra primary key(categoria),
 	constraint fk_tem_outra_sup_cat_nome foreign key(super_categoria) references super_categoria(nome),
 	constraint fk_tem_outra_cat_nome foreign key(categoria) references categoria(nome)
@@ -138,8 +138,9 @@ create table evento_reposicao (
 );
 
 -- SCRIPT
-insert into catergoria 
+insert into categoria 
 values 
+('Comidas'),
 ('Bebidas'), 
 ('Águas'),
 ('Sumos'),
@@ -205,10 +206,10 @@ values
 
 insert into tem_categoria
 values
-(1000000000001, 'Águas')
-(1000000000002, 'Águas')
-(1000000000003, 'Sumos')
-(1000000000004, 'Sumos')
+(1000000000001, 'Águas'),
+(1000000000002, 'Águas'),
+(1000000000003, 'Sumos'),
+(1000000000004, 'Sumos'),
 (1000000000005, 'Refrigerantes'),
 (1000000000006, 'Refrigerantes'),
 (1000000000011, 'Refrigerantes'),
@@ -233,13 +234,13 @@ insert into ponto_de_retalho
 values
 ('Worten', 'Lisboa', 'Sintra'),
 ('TagusPark', 'Lisboa', 'Oeiras'),
-('Clerigos', 'Porto', 'Porto'),
+('Clerigos', 'Porto', 'Porto');
 
 insert into instalada_em
 values
 (1001, 'SmartUI', 'Worten'),
-(1111, 'IVM LDA', 'TagusPark')
-(1001, 'Fuji', 'Clerigos')
+(1111, 'IVM LDA', 'TagusPark'),
+(1001, 'Fuji', 'Clerigos');
 
 insert into prateleira
 values
@@ -258,10 +259,10 @@ values
 
 insert into planograma
 values
-(1000000000001, 1, 1001, 'SmartUI', 10, 20 , 'Worten')
-(1000000000002, 1, 1001, 'SmartUI', 10, 20 , 'Worten')
-(1000000000003, 2, 1001, 'SmartUI', 10, 20 , 'Worten')
-(1000000000004, 2, 1001, 'SmartUI', 10, 20 , 'Worten')
+(1000000000001, 1, 1001, 'SmartUI', 10, 20 , 'Worten'),
+(1000000000002, 1, 1001, 'SmartUI', 10, 20 , 'Worten'),
+(1000000000003, 2, 1001, 'SmartUI', 10, 20 , 'Worten'),
+(1000000000004, 2, 1001, 'SmartUI', 10, 20 , 'Worten'),
 (1000000000005, 3, 1001, 'SmartUI', 10, 20 , 'Worten'),
 (1000000000006, 3, 1001, 'SmartUI', 10, 20 , 'Worten'),
 (1000000000011, 3, 1001, 'SmartUI', 10, 20 , 'Worten'),
@@ -275,9 +276,9 @@ values
 (1000000000033, 1, 1001, 'Fuji', 15, 45 , 'Clerigos'),
 (1000000000034, 1, 1001, 'Fuji', 15, 40 , 'Clerigos'),
 (1000000000035, 1, 1001, 'Fuji', 5, 10 , 'Clerigos'),
-(1000000000002, 1, 1001, 'Fuji', 5, 10 , 'Clerigos'),
-(1000000000013, 1, 1001, 'Fuji', 5, 15 , 'Clerigos'),
-(1000000000034, 1, 1001, 'Fuji', 20, 15 , 'Clerigos'),
+(1000000000002, 2, 1001, 'Fuji', 5, 10 , 'Clerigos'),
+(1000000000013, 3, 1001, 'Fuji', 5, 15 , 'Clerigos'),
+(1000000000034, 4, 1001, 'Fuji', 20, 15 , 'Clerigos');
 
 insert into retalhista 
 values
@@ -296,22 +297,22 @@ values
 ('Iogurtes', 1001, 1111, 'IVM LDA'),
 ('Gelatina', 1001, 1111, 'IVM LDA'),
 ('Bolos', 1001, 1111, 'IVM LDA'),
-('Chocolates', 1001, 1001, 'Fuji'),
+('Chocolates', 1001, 1001, 'SmartUI'),
 ('Águas', 1002, 1001, 'Fuji'),
 ('Sandes', 1003, 1001, 'Fuji'),
 ('Chocolates', 2001, 1001, 'Fuji');
 
 insert into evento_reposicao
 values
-(1000000000001, 1, 1001, 'SmartUI', 2022-08-17 12:30:00, 10 , 1001),
-(1000000000002, 1, 1001, 'SmartUI', 2022-08-17 14:45:00, 10 , 1001),
-(1000000000003, 2, 1001, 'SmartUI', 2022-08-17 12:35:00, 10 , 1001),
-(1000000000004, 2, 1001, 'SmartUI', 2022-08-17 12:45:00, 10 , 1001),
-(1000000000005, 3, 1001, 'SmartUI', 2022-08-17 13:30:00, 10 , 1001),
-(1000000000006, 3, 1001, 'SmartUI', 2022-05-17 13:30:00, 20 , 1001),
-(1000000000006, 3, 1001, 'SmartUI', 2022-05-17 13:30:00, 20 , 1001),
-(1000000000011, 3, 1001, 'SmartUI', 2022-05-17 13:30:00, 20 , 1001),
-(1000000000011, 3, 1001, 'SmartUI', 2022-05-17 13:30:00, 20 , 1001),
-(1000000000035, 1, 1001, 'Fuji', 2022-05-17 13:30:00, 5 , 1001),
-(1000000000035, 1, 1001, 'Fuji', 2022-05-17 13:30:00, 5 , 1001),
-(1000000000035, 1, 1001, 'Fuji', 2022-05-17 13:30:00, 5 , 1001);
+(1000000000001, 1, 1001, 'SmartUI', '2022-08-17 12:30:00', 10 , 1001),
+(1000000000002, 1, 1001, 'SmartUI', '2022-08-17 14:45:00', 10 , 1001),
+(1000000000003, 2, 1001, 'SmartUI', '2022-08-17 12:35:00', 10 , 1001),
+(1000000000004, 2, 1001, 'SmartUI', '2022-08-17 12:45:00', 10 , 1001),
+(1000000000005, 3, 1001, 'SmartUI', '2022-08-17 13:30:00', 10 , 1001),
+(1000000000006, 3, 1001, 'SmartUI', '2022-05-17 13:30:00', 20 , 1001),
+(1000000000006, 3, 1001, 'SmartUI', '2022-05-17 13:35:00', 20 , 1001),
+(1000000000011, 3, 1001, 'SmartUI', '2022-05-17 13:30:00', 20 , 1001),
+(1000000000011, 3, 1001, 'SmartUI', '2022-05-17 13:35:00', 20 , 1001),
+(1000000000035, 1, 1001, 'Fuji', '2022-05-17 13:30:00', 5 , 1001),
+(1000000000035, 1, 1001, 'Fuji', '2022-05-17 13:35:00', 5 , 1001),
+(1000000000035, 1, 1001, 'Fuji', '2022-05-17 13:36:00', 5 , 1001);

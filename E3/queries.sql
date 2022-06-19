@@ -20,37 +20,24 @@ Qual o nome do ou dos retalhistas que são responsáveis por todas as categorias
 dividir os retalhistas e as suas categorias por uma tabela com todas as categorias simples*/
 
 select nome
-from retalhista r
-where not exists (
-	select nome
-	from categoria_simples
-	EXCEPT
-	select nome_cat
-	from responsavel_por
-	where nome = nome_cat 
-	);
-
-(select tin, nome_cat 
-from responsavel_por
-
-) as table
-natural join 
-retalhista;
-
-
-SELECT DISTINCT	customer_name
-FROM	depositor	DP
-WHERE NOT EXISTS(
-	SELECT	branch_name
-	FROM	branch
-	SELECT	branch_name
-	FROM	(account	A
-		JOIN	depositor	D
-			ON	A.account_number	=	d.account_number)	AC
-	WHERE	AC.customer_name	=	x
-	EXCEPT
-
-
+from retalhista
+where tin in(
+    select distinct tin 
+    from responsavel_por as sx
+    -- devolve o tin no responsavel_por que não está na tabela seguinte
+    where NOT EXISTS ( 
+        -- tabela com todas as categorias simples
+        (select p.nome 
+        from categoria_simples as p )
+        EXCEPT
+        -- devolve uma tabela com as categorias que tem um responsável "agrupadas" pelo tin  
+        (select sp.nome_cat 
+        from  responsavel_por as sp 
+        where sp.tin = sx.tin) 
+        -- ao fazermos o except é como se da tabela anterior removessemos o agrupamento de todas
+        -- as categorias simples (o nr de vezes que este aparece)
+        )
+    );
 
 /* ex3 
 Quais os produtos (ean) que nunca foram repostos?*/
@@ -59,7 +46,14 @@ where ean not in
 	(select ean
 	from evento_reposicao);
 
-
+/* ex4 
+Quais os produtos (ean) que foram repostos sempre pelo mesmo retalhista?
+*/
+select ean
+from evento_reposicao
+group by ean -- agrupamos os eans repetidos 
+having count(distinct tin) = 1; -- só os representamos se apenas tiverem associados a apenas 1 tin, ou seja,
+                                -- a contagem dos tins diferentes seja igual a 1
 
 
 /* 7.1

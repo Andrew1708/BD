@@ -3,7 +3,7 @@
 
 SELECT dia_semana, concelho, SUM (unidade) AS total
 FROM vendas
-where ano-mes-dia_semana between date1 and date2
+--where ano-mes-dia_semana between date1 and date2
 GROUP BY 
 GROUPING SETS ( (dia_semana), (concelho), () ) ;
 

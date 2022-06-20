@@ -29,21 +29,21 @@ create table categoria (
 create table categoria_simples (
 	nome varchar(80) not null unique,
     constraint pk_categoria_simples primary key(nome),
-	constraint fk_categoria_nome foreign key(nome) references categoria(nome)
+	constraint fk_categoria_nome foreign key(nome) references categoria(nome) on delete cascade
 );
 
 create table super_categoria (
 	nome varchar(80) not null unique,
     constraint pk_super_categoria primary key(nome),
-	constraint fk_categoria_nome foreign key(nome) references categoria(nome)
+	constraint fk_categoria_nome foreign key(nome) references categoria(nome) on delete cascade 
 );
 
 create table tem_outra (
     categoria varchar(80) not null,
 	super_categoria varchar(80) not null,
     constraint pk_tem_outra primary key(categoria),
-	constraint fk_tem_outra_sup_cat_nome foreign key(super_categoria) references super_categoria(nome),
-	constraint fk_tem_outra_cat_nome foreign key(categoria) references categoria(nome)
+	constraint fk_tem_outra_sup_cat_nome foreign key(super_categoria) references super_categoria(nome) on delete cascade,
+	constraint fk_tem_outra_cat_nome foreign key(categoria) references categoria(nome) on delete cascade
 );
 
 create table produto (
@@ -51,14 +51,14 @@ create table produto (
     cat varchar(80) not null,
     descr varchar(80) not null,
     constraint pk_produto primary key(ean),
-    constraint fk_produto foreign key(cat) references categoria(nome)
+    constraint fk_produto foreign key(cat) references categoria(nome) on delete cascade
 );
 
 create table tem_categoria (
 	ean numeric(13) not null,
 	nome varchar(80) not null,
-  	constraint fk_tem_categoria_ean foreign key(ean) references produto(ean),
-	constraint fk_tem_categoria_nome foreign key(nome) references categoria(nome)
+  	constraint fk_tem_categoria_ean foreign key(ean) references produto(ean) on delete cascade,
+	constraint fk_tem_categoria_nome foreign key(nome) references categoria(nome) on delete cascade
 );
 
 create table ivm (
@@ -79,8 +79,8 @@ create table instalada_em (
 	fabricante varchar(80) not null,
 	local varchar(80) not null,
     constraint pk_instalada_em primary key(num_serie, fabricante),
-	constraint fk_instalada_em_num_serie_e_fabricante foreign key(num_serie, fabricante) references ivm(num_serie, fabricante),
-	constraint fk_instalada_em_local foreign key(local) references ponto_de_retalho(nome)
+	constraint fk_instalada_em_num_serie_e_fabricante foreign key(num_serie, fabricante) references ivm(num_serie, fabricante) on delete cascade,
+	constraint fk_instalada_em_local foreign key(local) references ponto_de_retalho(nome) on delete cascade
 );
 
 create table prateleira (
@@ -90,8 +90,8 @@ create table prateleira (
     altura real not null,
     nome varchar(80) not null,
     constraint pk_prateleira primary key(nro, num_serie, fabricante),
-    constraint fk_prateleira_num_serie_e_fabricante foreign key(num_serie, fabricante) references ivm(num_serie, fabricante),
-    constraint fk_prateleira_local foreign key(nome) references categoria(nome)
+    constraint fk_prateleira_num_serie_e_fabricante foreign key(num_serie, fabricante) references ivm(num_serie, fabricante) on delete cascade,
+    constraint fk_prateleira_local foreign key(nome) references categoria(nome) on delete cascade
 );
 
 create table planograma (
@@ -103,8 +103,8 @@ create table planograma (
     unidades numeric(10) not null,
     loc varchar(80) not null,
     constraint pk_planograma primary key(ean, nro, num_serie, fabricante), 
-    constraint fk_planograma_ean foreign key(ean) references produto(ean),
-    constraint fk_planograma_nro_e_num_serie_e_fabricante foreign key(nro, num_serie, fabricante) references prateleira(nro, num_serie, fabricante)
+    constraint fk_planograma_ean foreign key(ean) references produto(ean) on delete cascade,
+    constraint fk_planograma_nro_e_num_serie_e_fabricante foreign key(nro, num_serie, fabricante) references prateleira(nro, num_serie, fabricante) on delete cascade
 );
 
 create table retalhista (
@@ -119,9 +119,9 @@ create table responsavel_por (
     num_serie numeric(12) not null,
     fabricante varchar(80) not null,
     constraint pk_responsavel_por primary key(nome_cat, num_serie, fabricante), 
-    constraint fk_responsavel_por_num_serie_e_fabricante foreign key(num_serie, fabricante) references ivm(num_serie, fabricante),
-    constraint fk_responsavel_por_tin foreign key(tin) references retalhista(tin),
-    constraint fk_responsavel_por_nome_cat foreign key(nome_cat) references categoria(nome)
+    constraint fk_responsavel_por_num_serie_e_fabricante foreign key(num_serie, fabricante) references ivm(num_serie, fabricante) on delete cascade,
+    constraint fk_responsavel_por_tin foreign key(tin) references retalhista(tin) on delete cascade,
+    constraint fk_responsavel_por_nome_cat foreign key(nome_cat) references categoria(nome) on delete cascade
 );
 
 create table evento_reposicao (
@@ -133,8 +133,8 @@ create table evento_reposicao (
     unidades numeric(8) not null,
     tin numeric(9) not null,
     constraint pk_evento_reposicao primary key(ean, nro, num_serie, fabricante, instante),
-    constraint fk_evento_reposicao_ean_e_nro_e_num_serie_e_fabricante foreign key(ean, nro, num_serie, fabricante) references planograma(ean, nro, num_serie, fabricante),
-    constraint fk_evento_reposicao_tin foreign key(tin) references retalhista(tin)
+    constraint fk_evento_reposicao_ean_e_nro_e_num_serie_e_fabricante foreign key(ean, nro, num_serie, fabricante) references planograma(ean, nro, num_serie, fabricante) on delete cascade,
+    constraint fk_evento_reposicao_tin foreign key(tin) references retalhista(tin) on delete cascade
 );
 
 -- SCRIPT

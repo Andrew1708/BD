@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <title>Lista de Categorias</title>
 </head>
-<body style="padding:20px">
+<body onLoad="refresh()" style="padding:20px" >
 {% if cursor %}
     <table border="2px">
         <caption> Categorias </caption>
@@ -31,4 +31,11 @@
     <p> Erro: não foi possível obter dados da base de dados!</p>
 {% endif %}
 </body>
+
+<script language="Javascript" type="text/javascript">
+    function refresh() {
+            window.location.href = 'add_categoria?';
+    }
+</script>
+
 </html>

@@ -10,20 +10,27 @@
         <caption> Categorias </caption>
         <thead>
             <tr>
+                <th>EAN</th>
+                <th>Nr da prateleira</th>
+                <th>Nr de série</th>
+                <th>Fabricante</th>
+                <th>Instante</th>
+                <th>Unidades</th>
                 <th>Categoria</th>
-                <th></th>
+                <th>Total</th>
             </tr>
         </thead>
-        <tfoot> 
-            <tr>
-                <td><a href="add_categoria?"> Adicionar </a></td>
-            </tr>
-        </tfoot>
         <tbody>
             {% for record in cursor %}
                 <tr>
                     <td>{{ record[0] }}</td>
-                    <td><a href="elimina_categoria?nome={{ record[0] }}"> Eliminar </a></td>
+                    <td>{{ record[1] }}</td>
+                    <td>{{ record[2] }}</td>
+                    <td>{{ record[3] }}</td>
+                    <td>{{ record[4] }}</td>
+                    <td>{{ record[5] }}</td>
+                    <td>{{ record[6] }}</td>
+                    <td>{{ record[7] }}</td>
                 </tr>
             {% endfor %}
         </tbody>
@@ -35,9 +42,8 @@
 
 <script language="Javascript" type="text/javascript">
     function refresh() {
-            window.location.href = 'categoria?';
+            window.location.href = 'event_rep?';
     }
-    document.getElementById("botao").click();
 </script>
 
 </html>

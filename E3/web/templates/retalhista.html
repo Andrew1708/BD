@@ -7,11 +7,10 @@
 <body style="padding:20px" >
 {% if cursor %}
     <table border="2px">
-        <caption> Categorias </caption>
+        <caption> Retalhista </caption>
         <thead>
             <tr>
-                <th>Categoria</th>
-                <th></th>
+                <th>Nome</th>
             </tr>
         </thead>
         <tfoot> 
@@ -33,11 +32,6 @@
 <button onclick="refresh()" id ="botao"></button>
 </body>
 
-<script language="Javascript" type="text/javascript">
-    function refresh() {
-            window.location.href = 'categoria?';
-    }
-    document.getElementById("botao").click();
 </script>
 
 </html>

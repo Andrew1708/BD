@@ -88,11 +88,100 @@ def update_categoria():
         query = "INSERT INTO categoria VALUES ('%s');" %nome 
         data = (nome)
         cursor.execute(query, data)
-        return query
+        return lista_categorias()
     except Exception as e:
         return str(e)
     finally:
         dbConn.commit()
+        cursor.close()
+        dbConn.close()
+
+#5. b)
+@app.route("/retalhista")
+def lista_retalhista():
+    dbConn = None
+    cursor = None
+    try:
+        dbConn = psycopg2.connect(DB_CONNECTION_STRING)
+        cursor = dbConn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        query = "SELECT * FROM retalhista"
+        cursor.execute(query)
+        return render_template("retalhista.html", cursor=cursor)
+    except Exception as e:
+        return str(e)
+    finally:
+        cursor.close()
+        dbConn.close()
+
+# 5. c)        
+@app.route("/escolhe_ivm")
+def escolhe_ivm():
+    dbConn = None
+    cursor = None
+    try:
+        dbConn = psycopg2.connect(DB_CONNECTION_STRING)
+        cursor = dbConn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        query = "SELECT *\
+                 FROM ivm"
+        cursor.execute(query)
+        return render_template("escolhe_ivm.html", cursor=cursor)
+    except Exception as e:
+        return str(e)
+    finally:
+        cursor.close()
+        dbConn.close()
+
+@app.route("/event_rep", methods=["POST"])
+def listar_eventos():
+    dbConn = None
+    cursor = None
+    try:
+        dbConn = psycopg2.connect(DB_CONNECTION_STRING)
+        cursor = dbConn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        nr_serie = request.form["nr_serie"]
+        fab = request.form["fab"]
+        query = "SELECT ean, nro, num_serie, fabricante, instante, unidades, cat, sum\
+                 FROM(\
+                        (SELECT cat, SUM(unidades) as sum\
+                        FROM evento_reposicao NATURAL JOIN produto\
+                        GROUP BY cat) soma\
+                        NATURAL JOIN evento_reposicao NATURAL JOIN produto\
+                    )\
+                 WHERE num_serie =%s AND fabricante =%s;" #%nr_serie %fab
+        data = (nr_serie, fab)
+        cursor.execute(query, data)
+        return render_template("event_rep.html", cursor=cursor)
+    except Exception as e:
+        return str(e)
+    finally:
+        dbConn.commit()
+        cursor.close()
+        dbConn.close()
+
+#5 d) 
+@app.route("/tree_cat")
+def tree_cat():
+    dbConn = None
+    cursor = None
+    try:
+        dbConn = psycopg2.connect(DB_CONNECTION_STRING)
+        cursor = dbConn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        query = "WITH RECURSIVE subordinates AS(\
+                 SELECT categoria, super_categoria\
+                 FROM tem_outra\
+                 WHERE super_categoria = 'Bebidas'\
+                 UNION\
+                    SELECT t.categoria, t.super_categoria\
+                    FROM tem_outra t\
+                    INNER JOIN subordinates s on s.categoria = t.super_categoria\
+                )\
+                SELECT *\
+                FROM subordinates"
+        cursor.execute(query)
+        return render_template("tree_cat.html", cursor=cursor)
+    except Exception as e:
+        return str(e)
+    finally:
         cursor.close()
         dbConn.close()
 

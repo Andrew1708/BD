@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Lista de Categorias</title>
+    </head>
+    <body style="padding:20px" >
+    {% if cursor %}
+        <table border="2px">
+            <caption> Categorias </caption>
+            <thead>
+                <tr>
+                    <th>Nr de série</th>
+                    <th>Fabricante</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for record in cursor %}
+                    <tr>
+                        <td>{{ record[0] }}</td>
+                        <td>{{ record[1] }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+    {% else %}
+        <p> Erro: não foi possível obter dados da base de dados!</p>
+    {% endif %}
+
+<h3> Escolhe IVM </h3>
+<form action="event_rep" method="post">
+<p>Número de série: <input type="text" name="nr_serie"/></p>
+<p>Fabricante: <input type="text" name="fab"/></p>
+<p><input type="submit" value="Submit" href="./event_rep"></p>
+</form>
+    </body>
+</html>

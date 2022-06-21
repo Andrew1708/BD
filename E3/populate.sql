@@ -43,7 +43,8 @@ create table tem_outra (
 	super_categoria varchar(80) not null,
     constraint pk_tem_outra primary key(categoria),
 	constraint fk_tem_outra_sup_cat_nome foreign key(super_categoria) references super_categoria(nome) on delete cascade,
-	constraint fk_tem_outra_cat_nome foreign key(categoria) references categoria(nome) on delete cascade
+	constraint fk_tem_outra_cat_nome foreign key(categoria) references categoria(nome) on delete cascade,
+    check (categoria != super_categoria)
 );
 
 create table produto (
@@ -52,7 +53,7 @@ create table produto (
     descr varchar(80) not null,
     constraint pk_produto primary key(ean),
     constraint fk_produto foreign key(cat) references categoria(nome) on delete cascade
-);
+);--verificar se ean existe em tem categoria
 
 create table tem_categoria (
 	ean numeric(13) not null,

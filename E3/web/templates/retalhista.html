@@ -23,7 +23,7 @@
             {% for record in cursor %}
                 <tr>
                     <td>{{ record[0] }}</td>
-                    <td><a href="elimina_retalhista?nome={{ record[0] }}"> Eliminar </a></td>
+                    <td><a href="elimina_retalhista?tin={{ record[0] }}"> Eliminar </a></td>
                 </tr>
             {% endfor %}
         </tbody>

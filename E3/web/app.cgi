@@ -125,6 +125,14 @@ def update_subcategoria():
         dbConn.commit()
         cursor.close()
         dbConn.close()
+
+@app.route("/escolhe_sub")
+def escolhe_sub():
+    try:
+        return render_template("add_subcategoria.html", params=request.args)
+    except Exception as e:
+        return str(e)
+
 #5. b)
 @app.route("/retalhista")
 def lista_retalhista():
@@ -142,12 +150,58 @@ def lista_retalhista():
         cursor.close()
         dbConn.close()
 
-@app.route("/escolhe_sub")
-def escolhe_sub():
+@app.route("/add_retalhista")
+def add_retalhista():
     try:
-        return render_template("add_subcategoria.html", params=request.args)
+        return render_template("add_retalhista.html", params=request.args)
     except Exception as e:
         return str(e)
+
+@app.route("/update_retalhista", methods=["POST"])
+def update_retalhista():
+    dbConn = None
+    cursor = None
+    try:
+        dbConn = psycopg2.connect(DB_CONNECTION_STRING)
+        cursor = dbConn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        nome = request.form["nome"]
+        tin = request.form["tin"]
+        query = "start transaction;\
+                INSERT INTO retalhista VALUES ('%s','%s');\
+                commit;" %(tin, nome)
+
+        data = (nome,tin)
+        cursor.execute(query, data)
+        return lista_retalhista()
+    except Exception as e:
+        e = "Erro ao adicionar retalhista"
+        return str(e)
+    finally:
+        dbConn.commit()
+        cursor.close()
+        dbConn.close()
+
+@app.route("/elimina_retalhista")
+def elimina_retalhista():
+    try:
+        dbConn = psycopg2.connect(DB_CONNECTION_STRING)
+        cursor = dbConn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        tin = request.args.get("tin")
+        query = "start transaction;\
+                DELETE FROM evento_reposicao WHERE tin = %s;\
+                DELETE FROM responsavel_por WHERE tin = %s;\
+                DELETE FROM retalhista WHERE tin = %s;\
+                commit;" %(tin, tin, tin)
+        data = (tin,)
+        cursor.execute(query, data)
+        return lista_retalhista()
+    except Exception as e:
+        return str(e)
+    finally:
+        dbConn.commit()
+        cursor.close()
+        dbConn.close()
+
 # 5. c)        
 @app.route("/escolhe_ivm")
 def escolhe_ivm():
@@ -193,44 +247,7 @@ def listar_eventos():
         cursor.close()
         dbConn.close()
 
-# @app.route("/retalhista")
-# def lista_retalhista():
-#     dbConn = None
-#     cursor = None
-#     try:
-#         dbConn = psycopg2.connect(DB_CONNECTION_STRING)
-#         cursor = dbConn.cursor(cursor_factory=psycopg2.extras.DictCursor)
-#         query = "SELECT * FROM retalhista"
-#         cursor.execute(query)
-#         return render_template("retalhista.html", cursor=cursor)
-#     except Exception as e:
-#         return str(e)
-#     finally:
-#         cursor.close()
-#         dbConn.close()
 
-# @app.route("/update_retalhista", methods=["POST"])
-# def update_retalhista():
-#     dbConn = None
-#     cursor = None
-#     try:
-#         dbConn = psycopg2.connect(DB_CONNECTION_STRING)
-#         cursor = dbConn.cursor(cursor_factory=psycopg2.extras.DictCursor)
-#         nome = request.form["nome"]
-#         tin = request.form["tin"]
-#         query = "start transaction;\
-#                 INSERT INTO retalhista VALUES ('%s','%s');\
-#                 commit;" %(nome,nome)
-
-#         data = (nome,tin)
-#         cursor.execute(query, data)
-#         return lista_retalhista()
-#     except Exception as e:
-#         return str(e)
-#     finally:
-#         dbConn.commit()
-#         cursor.close()
-#         dbConn.close()
 
 #5 d) 
 @app.route("/tree_cat")

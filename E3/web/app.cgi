@@ -193,6 +193,45 @@ def listar_eventos():
         cursor.close()
         dbConn.close()
 
+# @app.route("/retalhista")
+# def lista_retalhista():
+#     dbConn = None
+#     cursor = None
+#     try:
+#         dbConn = psycopg2.connect(DB_CONNECTION_STRING)
+#         cursor = dbConn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+#         query = "SELECT * FROM retalhista"
+#         cursor.execute(query)
+#         return render_template("retalhista.html", cursor=cursor)
+#     except Exception as e:
+#         return str(e)
+#     finally:
+#         cursor.close()
+#         dbConn.close()
+
+# @app.route("/update_retalhista", methods=["POST"])
+# def update_retalhista():
+#     dbConn = None
+#     cursor = None
+#     try:
+#         dbConn = psycopg2.connect(DB_CONNECTION_STRING)
+#         cursor = dbConn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+#         nome = request.form["nome"]
+#         tin = request.form["tin"]
+#         query = "start transaction;\
+#                 INSERT INTO retalhista VALUES ('%s','%s');\
+#                 commit;" %(nome,nome)
+
+#         data = (nome,tin)
+#         cursor.execute(query, data)
+#         return lista_retalhista()
+#     except Exception as e:
+#         return str(e)
+#     finally:
+#         dbConn.commit()
+#         cursor.close()
+#         dbConn.close()
+
 #5 d) 
 @app.route("/tree_cat")
 def tree_cat():

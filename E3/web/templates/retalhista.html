@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <title>Lista de Categorias</title>
-    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="../static/css/style.css">
 </head>
 <body style="padding:20px" >
 {% if cursor %}
@@ -16,14 +16,14 @@
         </thead>
         <tfoot> 
             <tr>
-                <td><a href="add_categoria?"> Adicionar </a></td>
+                <td><a href="add_retalhista?"> Adicionar </a></td>
             </tr>
         </tfoot>
         <tbody>
             {% for record in cursor %}
                 <tr>
                     <td>{{ record[0] }}</td>
-                    <td><a href="elimina_categoria?nome={{ record[0] }}"> Eliminar </a></td>
+                    <td><a href="elimina_retalhista?nome={{ record[0] }}"> Eliminar </a></td>
                 </tr>
             {% endfor %}
         </tbody>

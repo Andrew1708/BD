@@ -7,9 +7,9 @@ import psycopg2.extras
 
 ## SGBD configs
 DB_HOST = "db.tecnico.ulisboa.pt"
-DB_USER = "ist192737"
+DB_USER = "ist199077"
 DB_DATABASE = DB_USER
-DB_PASSWORD = "Morgado1"
+DB_PASSWORD = "1234"
 DB_CONNECTION_STRING = "host=%s dbname=%s user=%s password=%s" % (
     DB_HOST,
     DB_DATABASE,
@@ -60,7 +60,7 @@ def elimina_categoria():
         cursor = dbConn.cursor(cursor_factory=psycopg2.extras.DictCursor)
         nome_cat = request.args.get("nome")
         query = "DELETE FROM categoria WHERE nome = '%s';" %nome_cat
-        data = nome_cat
+        data = (nome_cat,)
         cursor.execute(query, data)
         return query
     except Exception as e:
@@ -85,8 +85,12 @@ def update_categoria():
         dbConn = psycopg2.connect(DB_CONNECTION_STRING)
         cursor = dbConn.cursor(cursor_factory=psycopg2.extras.DictCursor)
         nome = request.form["nome"]
-        query = "INSERT INTO categoria VALUES ('%s');" %nome 
-        data = (nome)
+        query = "start transaction;\
+                INSERT INTO categoria VALUES ('%s');\
+                INSERT INTO categoria_simples VALUES ('%s');\
+                commit;" %(nome,nome)
+
+        data = (nome,)
         cursor.execute(query, data)
         return lista_categorias()
     except Exception as e:
@@ -96,6 +100,31 @@ def update_categoria():
         cursor.close()
         dbConn.close()
 
+@app.route("/update_subcat", methods=["POST"])
+def update_subcategoria():
+    dbConn = None
+    cursor = None
+    try:
+        dbConn = psycopg2.connect(DB_CONNECTION_STRING)
+        cursor = dbConn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        nomeSuper = request.form["nomeSuper"]
+        nomeSub = request.form["nomeSub"]
+        query = "start transaction;\
+                DELETE FROM categoria_simples WHERE nome = '%s';\
+                INSERT INTO super_categoria VALUES ('%s');\
+                INSERT INTO tem_outra VALUES ('%s','%s')\
+                commit;" %(nomeSuper,nomeSuper, nomeSub, nomeSuper)
+
+        data = (nomeSuper,nomeSub)
+        cursor.execute(query, data)
+        
+        return lista_categorias()
+    except Exception as e:
+        return str(e)
+    finally:
+        dbConn.commit()
+        cursor.close()
+        dbConn.close()
 #5. b)
 @app.route("/retalhista")
 def lista_retalhista():
@@ -113,6 +142,12 @@ def lista_retalhista():
         cursor.close()
         dbConn.close()
 
+@app.route("/escolhe_sub")
+def escolhe_sub():
+    try:
+        return render_template("add_subcategoria.html", params=request.args)
+    except Exception as e:
+        return str(e)
 # 5. c)        
 @app.route("/escolhe_ivm")
 def escolhe_ivm():

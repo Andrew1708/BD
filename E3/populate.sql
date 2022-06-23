@@ -4,21 +4,20 @@ ssh ist199077@sigma.tecnico.ulisboa.pt
 psql -h db.tecnico.ulisboa.pt -U ist199077
  \i populate.sql*/
 
-
-drop table if exists categoria cascade;
-drop table if exists categoria_simples cascade;
-drop table if exists super_categoria cascade;
-drop table if exists tem_outra cascade;
-drop table if exists produto cascade;
-drop table if exists tem_categoria cascade;
-drop table if exists ivm cascade;
-drop table if exists ponto_de_retalho cascade;
-drop table if exists instalada_em cascade;
-drop table if exists prateleira cascade;
-drop table if exists planograma cascade;
-drop table if exists retalhista cascade;
-drop table if exists responsavel_por cascade;
-drop table if exists evento_reposicao cascade;
+drop table if exists evento_reposicao;
+drop table if exists responsavel_por;
+drop table if exists retalhista;
+drop table if exists planograma;
+drop table if exists prateleira;
+drop table if exists instalada_em;
+drop table if exists ponto_de_retalho;
+drop table if exists ivm;
+drop table if exists tem_categoria;
+drop table if exists produto;
+drop table if exists tem_outra;
+drop table if exists super_categoria;
+drop table if exists categoria_simples;
+drop table if exists categoria;
 
 
 create table categoria (

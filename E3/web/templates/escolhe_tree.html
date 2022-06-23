@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<h3> Escolhe Super Categoria </h3>
+<form action="/tree_cat" method="post">
+        <label for="cars">Choose a car:</label>
+        <select id="super_categoria" name="super_categoria">
+            {%for record in cursor%}
+          <option>{{record[0]}}</option>
+          {%endfor%}
+        </select>
+        <input type="submit" value="Submit" href="./tree_cat">
+      </form>
+      
+      </body>
+      </html>
+</html>

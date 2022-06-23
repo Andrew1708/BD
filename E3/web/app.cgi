@@ -7,9 +7,9 @@ import psycopg2.extras
 
 ## SGBD configs
 DB_HOST = "db.tecnico.ulisboa.pt"
-DB_USER = "ist199077"
+DB_USER = "ist192737"
 DB_DATABASE = DB_USER
-DB_PASSWORD = "1234"
+DB_PASSWORD = "Morgado1"
 DB_CONNECTION_STRING = "host=%s dbname=%s user=%s password=%s" % (
     DB_HOST,
     DB_DATABASE,
@@ -100,6 +100,13 @@ def update_categoria():
         cursor.close()
         dbConn.close()
 
+@app.route("/escolhe_sub")
+def escolhe_sub():
+    try:
+        return render_template("add_subcategoria.html", params=request.args)
+    except Exception as e:
+        return str(e)
+
 @app.route("/update_subcat", methods=["POST"])
 def update_subcategoria():
     dbConn = None
@@ -109,12 +116,14 @@ def update_subcategoria():
         cursor = dbConn.cursor(cursor_factory=psycopg2.extras.DictCursor)
         nomeSuper = request.form["nomeSuper"]
         nomeSub = request.form["nomeSub"]
-        query = "start transaction;\
-                DELETE FROM categoria_simples WHERE nome = '%s';\
-                INSERT INTO super_categoria VALUES ('%s');\
-                INSERT INTO tem_outra VALUES ('%s','%s')\
-                commit;" %(nomeSuper,nomeSuper, nomeSub, nomeSuper)
-
+        query = "DO\
+                IF(NOT EXISTS IN( SELECT *\
+                                  FROM super_categoria\
+                                  WHERE nome = %s\
+                                )\
+                BEGIN\
+                    PRINT 'slay'\
+                END" %(nomeSuper,)
         data = (nomeSuper,nomeSub)
         cursor.execute(query, data)
         
@@ -126,12 +135,10 @@ def update_subcategoria():
         cursor.close()
         dbConn.close()
 
-@app.route("/escolhe_sub")
-def escolhe_sub():
-    try:
-        return render_template("add_subcategoria.html", params=request.args)
-    except Exception as e:
-        return str(e)
+
+# DELETE FROM categoria_simples WHERE nome = '%s'\
+# INSERT INTO super_categoria VALUES ('%s');\
+# INSERT INTO tem_outra VALUES ('%s','%s')\
 
 #5. b)
 @app.route("/retalhista")
@@ -250,6 +257,23 @@ def listar_eventos():
 
 
 #5 d) 
+@app.route("/escolhe_tree")
+def escolhe_tree():
+    dbConn = None
+    cursor = None
+    try:
+        dbConn = psycopg2.connect(DB_CONNECTION_STRING)
+        cursor = dbConn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        query = """SELECT *
+                   FROM super_categoria"""
+        cursor.execute(query)
+        return render_template("escolhe_tree.html", cursor=cursor)
+    except Exception as e:
+        return str(e)
+    finally:
+        cursor.close()
+        dbConn.close()
+
 @app.route("/tree_cat")
 def tree_cat():
     dbConn = None
@@ -257,19 +281,21 @@ def tree_cat():
     try:
         dbConn = psycopg2.connect(DB_CONNECTION_STRING)
         cursor = dbConn.cursor(cursor_factory=psycopg2.extras.DictCursor)
-        query = "WITH RECURSIVE subordinates AS(\
-                 SELECT categoria, super_categoria\
-                 FROM tem_outra\
-                 WHERE super_categoria = 'Bebidas'\
-                 UNION\
-                    SELECT t.categoria, t.super_categoria\
-                    FROM tem_outra t\
-                    INNER JOIN subordinates s on s.categoria = t.super_categoria\
-                )\
-                SELECT *\
-                FROM subordinates"
+        super_cat = request.form["super_categoria"]
+        query = """WITH RECURSIVE subordinates AS(
+                 SELECT categoria
+                 FROM tem_outra
+                 WHERE super_categoria = '%s'
+                 UNION
+                    SELECT t.categoria
+                    FROM tem_outra t
+                    INNER JOIN subordinates s on s.categoria = t.super_categoria
+                )
+                SELECT *
+                FROM subordinates"""
+        date = (super_cat,)
         cursor.execute(query)
-        return render_template("tree_cat.html", cursor=cursor)
+        return render_template("tree_cat.html", cursor=cursor)#, super_categoria = <variavel a ir buscar> )
     except Exception as e:
         return str(e)
     finally:

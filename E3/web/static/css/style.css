@@ -6,8 +6,12 @@ body {
     background-color: rgb(255, 187, 142);
     font-family: 'Roboto', sans-serif;
     font-size: 30px;
+    text-decoration: none;
 }
+a {
+    text-decoration: none;
 
+}
 table {
     table-layout: fixed;
     border-collapse: collapse;
@@ -16,6 +20,8 @@ table {
     font-size: 50px;
     font-weight: 1000;
     text-align: center;
+    text-decoration: none;
+
   }
 thead {
     font-size: 90%;
@@ -26,4 +32,6 @@ thead {
 tbody {
     font-size: 30px;
     font-weight: 100;
+    text-decoration: none;
+
 }

@@ -19,6 +19,12 @@ DB_CONNECTION_STRING = "host=%s dbname=%s user=%s password=%s" % (
 
 app = Flask(__name__)
 
+@app.route("/menu")
+def menu():
+    try:
+        return render_template("menu.html", params=request.args)
+    except Exception as e:
+        return str(e)
 
 @app.route("/")
 def index():
@@ -68,13 +74,6 @@ def add_categoria():
     except Exception as e:
         return str(e)
 
-@app.route("/menu")
-def menu():
-    try:
-        return render_template("menu.html", params=request.args)
-    except Exception as e:
-        return str(e)
-
 @app.route("/update_cat", methods=["POST"])
 def update_categoria():
     dbConn = None
@@ -114,16 +113,22 @@ def update_subcategoria():
         cursor = dbConn.cursor(cursor_factory=psycopg2.extras.DictCursor)
         nomeSuper = request.form["nomeSuper"]
         nomeSub = request.form["nomeSub"]
-        query = "DO\
-                IF(NOT EXISTS IN( SELECT *\
-                                  FROM super_categoria\
-                                  WHERE nome = %s\
-                                )\
-                BEGIN\
-                    PRINT 'slay'\
-                END" %(nomeSuper,)
-        data = (nomeSuper,nomeSub)
-        cursor.execute(query, data)
+
+
+        query1 = "SELECT * FROM super_categoria WHERE nome = %s" %nomeSuper
+        data1 = (nomeSuper,)
+        cursor.execute(query1, data1)
+        row = cursor.fetchone()
+        if row == None:
+            query2 = "INSERT INTO tem_outra VALUES ('%s','%s')" %(nomeSuper,nomeSub)
+            data2 = (nomeSuper,nomeSub)
+            cursor.execute(query2, data2)
+        else:
+            query3 = "DELETE FROM categoria_simples WHERE nome = '%s'\
+                    INSERT INTO super_categoria VALUES ('%s');\
+                    INSERT INTO tem_outra VALUES ('%s','%s')" %(nomeSuper,nomeSuper,nomeSub, nomeSuper)
+            data3 = (nomeSuper,nomeSub)
+            cursor.execute(query3, data3)
         
         return lista_categorias()
     except Exception as e:
@@ -132,11 +137,6 @@ def update_subcategoria():
         dbConn.commit()
         cursor.close()
         dbConn.close()
-
-
-# DELETE FROM categoria_simples WHERE nome = '%s'\
-# INSERT INTO super_categoria VALUES ('%s');\
-# INSERT INTO tem_outra VALUES ('%s','%s')\
 
 #5. b)
 @app.route("/retalhista")
@@ -225,24 +225,25 @@ def escolhe_ivm():
         cursor.close()
         dbConn.close()
 
-@app.route("/event_rep", methods=["POST"])
+@app.route("/event_rep")
 def listar_eventos():
     dbConn = None
     cursor = None
     try:
         dbConn = psycopg2.connect(DB_CONNECTION_STRING)
         cursor = dbConn.cursor(cursor_factory=psycopg2.extras.DictCursor)
-        nr_serie = request.form["nr_serie"]
-        fab = request.form["fab"]
-        query = "SELECT ean, nro, num_serie, fabricante, instante, unidades, cat, sum\
-                 FROM(\
-                        (SELECT cat, SUM(unidades) as sum\
-                        FROM evento_reposicao NATURAL JOIN produto\
-                        GROUP BY cat) soma\
-                        NATURAL JOIN evento_reposicao NATURAL JOIN produto\
-                    )\
-                 WHERE num_serie =%s AND fabricante =%s;" #%nr_serie %fab
-        data = (nr_serie, fab)
+        dados = request.args.get("dados")
+        dados = list(map(str, dados.split(', ')))
+        dados[0]= int(dados[0])
+        query = """SELECT ean, nro, num_serie, fabricante, instante, unidades, cat, sum
+                 FROM(
+                        (SELECT cat, SUM(unidades) as sum
+                        FROM evento_reposicao NATURAL JOIN produto
+                        GROUP BY cat) soma
+                        NATURAL JOIN evento_reposicao NATURAL JOIN produto
+                    )
+                 WHERE num_serie =%s AND fabricante =%s;""" 
+        data = (dados[0], dados[1])
         cursor.execute(query, data)
         return render_template("event_rep.html", cursor=cursor)
     except Exception as e:
@@ -272,7 +273,7 @@ def escolhe_tree():
         cursor.close()
         dbConn.close()
 
-@app.route("/tree_cat")
+@app.route("/tree_cat", methods=["POST"])
 def tree_cat():
     dbConn = None
     cursor = None
@@ -283,7 +284,7 @@ def tree_cat():
         query = """WITH RECURSIVE subordinates AS(
                  SELECT categoria
                  FROM tem_outra
-                 WHERE super_categoria = '%s'
+                 WHERE super_categoria = %s
                  UNION
                     SELECT t.categoria
                     FROM tem_outra t
@@ -292,8 +293,8 @@ def tree_cat():
                 SELECT *
                 FROM subordinates"""
         data = (super_cat,)
-        cursor.execute(query,data)
-        return render_template("tree_cat.html", cursor=cursor)#, super_categoria = <variavel a ir buscar> )
+        cursor.execute(query, data)
+        return render_template("tree_cat.html", cursor=cursor, super_categoria = super_cat)
     except Exception as e:
         return str(e)
     finally:

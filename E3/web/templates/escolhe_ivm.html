@@ -13,6 +13,7 @@
                 <tr>
                     <th>Nr de série</th>
                     <th>Fabricante</th>
+                    <th>Eventos de Reposição</th>
                 </tr>
             </thead>
             <tbody>
@@ -20,6 +21,7 @@
                     <tr>
                         <td>{{ record[0] }}</td>
                         <td>{{ record[1] }}</td>
+                        <td><a href="event_rep?dados= {{record[0]}}, {{ record[1] }}"> Mostrar </a></td>
                     </tr>
                 {% endfor %}
             </tbody>
@@ -27,13 +29,5 @@
         <p> Erro: não foi possível obter dados da base de dados!</p>
     {% endif %}
 
-<h3> Escolhe IVM </h3>
-<form action="event_rep" method="post">
-<p>Número de série: <input type="text" name="nr_serie"/></p>
-<p>Fabricante: <input type="text" name="fab"/></p>
-<p><input type="submit" value="Submit" href="./event_rep"></p>
-</form>
-<a href="./menu" class="button" style="background-color: aquamarine; font-size: 3vw; color:rgb(0, 0, 0); border: 10px solid white; border-radius: 20%; font-style: normal;">Voltar ao menu</a>
-
-    </body>
+<!-- <a href="./menu" class="button" style="background-color: aquamarine; font-size: 3vw; color:rgb(0, 0, 0); border: 10px solid white; border-radius: 20%; font-style: normal;">Voltar ao menu</a> -->
 </html>

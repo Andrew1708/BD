@@ -77,6 +77,13 @@ def add_categoria():
     except Exception as e:
         return str(e)
 
+@app.route("/menu")
+def menu():
+    try:
+        return render_template("menu.html", params=request.args)
+    except Exception as e:
+        return str(e)
+
 @app.route("/update_cat", methods=["POST"])
 def update_categoria():
     dbConn = None
@@ -293,8 +300,8 @@ def tree_cat():
                 )
                 SELECT *
                 FROM subordinates"""
-        date = (super_cat,)
-        cursor.execute(query)
+        data = (super_cat,)
+        cursor.execute(query,data)
         return render_template("tree_cat.html", cursor=cursor)#, super_categoria = <variavel a ir buscar> )
     except Exception as e:
         return str(e)

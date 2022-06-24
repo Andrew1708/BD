@@ -5,16 +5,20 @@ drop trigger if exists RI1 on tem_outra;  -- garante que não existe um trigger 
 create or replace function tem_outra_trigger() returns trigger as $$ -- cria função
 
 begin
-    if categoria == super_categoria then 
+    select categoria
+    from tem_outra
+    where categoria = super_categoria
+
+    if found then 
         raise exception 'As Categorias não podem estar contidas dentro de si próprias';
     end if;
 
     WITH RECURSIVE cats AS(
-                 SELECT categoria
+                 SELECT categoria, super_categoria
                  FROM tem_outra
                  WHERE super_categoria = new.super_categoria
                  UNION
-                    SELECT t.categoria
+                    SELECT t.categoria, t.super_categoria
                     FROM tem_outra t
                     INNER JOIN cats c on c.categoria = t.super_categoria
                 )

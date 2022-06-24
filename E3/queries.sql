@@ -74,6 +74,7 @@ começar com 'A' e ordenar alfabeticamente é mais rápido com uma binary tree. 
 drop index des_idx
 
 create index des_idx on produto(descr);
+create index nom_idx on tem_categoria(nome);
 
 SELECT T.nome, count(T.ean)
 FROM produto P, tem_categoria T

@@ -56,7 +56,8 @@ def elimina_categoria():
         dbConn = psycopg2.connect(DB_CONNECTION_STRING)
         cursor = dbConn.cursor(cursor_factory=psycopg2.extras.DictCursor)
         nome_cat = request.args.get("nome")
-        query = "DELETE FROM categoria WHERE nome = '%s';" %nome_cat
+        query = """ DELETE FROM categoria_simples WHERE nome = '%s';
+                DELETE FROM categoria WHERE nome = '%s'; """ %(nome_cat, nome_cat)
         data = (nome_cat,)
         cursor.execute(query, data)
         return query
@@ -100,9 +101,10 @@ def update_categoria():
 @app.route("/escolhe_sub")
 def escolhe_sub():
     try:
-        return render_template("add_subcategoria.html", params=request.args)
+        return render_template("add_subcategoria.html")
     except Exception as e:
         return str(e)
+
 
 @app.route("/update_subcat", methods=["POST"])
 def update_subcategoria():
@@ -115,23 +117,24 @@ def update_subcategoria():
         nomeSub = request.form["nomeSub"]
 
 
-        query1 = "SELECT * FROM super_categoria WHERE nome = %s" %nomeSuper
+        query1 = "SELECT * FROM super_categoria WHERE nome = '%s'" %nomeSuper
         data1 = (nomeSuper,)
         cursor.execute(query1, data1)
         row = cursor.fetchone()
-        if row == None:
-            query2 = "INSERT INTO tem_outra VALUES ('%s','%s')" %(nomeSuper,nomeSub)
+        if row != None:
+            query2 = "INSERT INTO tem_outra VALUES ('%s','%s')" %(nomeSub, nomeSuper)
             data2 = (nomeSuper,nomeSub)
             cursor.execute(query2, data2)
         else:
-            query3 = "DELETE FROM categoria_simples WHERE nome = '%s'\
+            query3 = "DELETE FROM categoria_simples WHERE nome = '%s';\
                     INSERT INTO super_categoria VALUES ('%s');\
-                    INSERT INTO tem_outra VALUES ('%s','%s')" %(nomeSuper,nomeSuper,nomeSub, nomeSuper)
+                    INSERT INTO tem_outra VALUES ('%s','%s');" %(nomeSuper,nomeSuper,nomeSub, nomeSuper)
             data3 = (nomeSuper,nomeSub)
             cursor.execute(query3, data3)
         
         return lista_categorias()
     except Exception as e:
+        e = "Erro ao adicionar sub-categoria"
         return str(e)
     finally:
         dbConn.commit()
